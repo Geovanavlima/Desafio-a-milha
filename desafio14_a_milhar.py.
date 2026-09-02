@@ -1,0 +1,111 @@
+"""
+Desafio 14 - A Milhar
+"""
+
+import random
+from dataclasses import dataclass, field
+
+# ---------------------------------------------------------------------------
+# Constantes
+# ---------------------------------------------------------------------------
+QUANTIDADE_DE_NUMEROS = 4      # quantos numeros compoem cada sorteio
+NUMERO_MINIMO = 0
+NUMERO_MAXIMO = 9
+
+
+# ---------------------------------------------------------------------------
+# Estrutura de dados: guarda o historico da partida de forma organizada
+# ---------------------------------------------------------------------------
+@dataclass
+class ResultadoJogo:
+    """Guarda as informacoes finais de uma partida jogada."""
+    total_tentativas: int
+    numero_vencedor: str
+    historico: list[str] = field(default_factory=list)
+
+
+# ---------------------------------------------------------------------------
+# Funcoes principais
+# ---------------------------------------------------------------------------
+def sortear_numeros(quantidade: int = QUANTIDADE_DE_NUMEROS) -> list[int]:
+    """Sorteia uma lista de numeros aleatorios entre NUMERO_MINIMO e NUMERO_MAXIMO.
+
+    Args:
+        quantidade: quantos numeros sortear (padrao: 4).
+
+    Returns:
+        Lista de inteiros sorteados, ex: [3, 3, 7, 1].
+    """
+    return [random.randint(NUMERO_MINIMO, NUMERO_MAXIMO) for _ in range(quantidade)]
+
+
+def numeros_para_texto(numeros: list[int]) -> str:
+    """Converte a lista de numeros sorteados em uma string, ex: [3,3,7,1] -> '3371'."""
+    return "".join(str(numero) for numero in numeros)
+
+
+def eh_vitoria(numeros: list[int]) -> bool:
+    """Verifica se todos os numeros sorteados sao iguais.
+
+    Usamos 'set()' porque ele remove automaticamente valores duplicados:
+    se todos os numeros forem iguais, o set tera apenas 1 elemento.
+    """
+    return len(set(numeros)) == 1
+
+
+def formatar_tentativa(numero_tentativa: int) -> str:
+    """Formata o numero da tentativa com zeros a esquerda (ex: 1 -> '001')."""
+    return f"{numero_tentativa:03d}"
+
+
+def jogar_partida(exibir_progresso: bool = True) -> ResultadoJogo:
+    """Executa uma partida completa do jogo ate o jogador vencer.
+
+    Args:
+        exibir_progresso: se True, imprime cada tentativa no console.
+
+    Returns:
+        Um objeto ResultadoJogo com o resumo da partida.
+    """
+    tentativa_atual = 0
+    historico: list[str] = []
+
+    while True:
+        tentativa_atual += 1
+        numeros_sorteados = sortear_numeros()
+        numeros_texto = numeros_para_texto(numeros_sorteados)
+        linha = f"Tentativa {formatar_tentativa(tentativa_atual)}: {numeros_texto}"
+        historico.append(linha)
+
+        if exibir_progresso:
+            print(linha)
+
+        if eh_vitoria(numeros_sorteados):
+            return ResultadoJogo(
+                total_tentativas=tentativa_atual,
+                numero_vencedor=numeros_texto,
+                historico=historico,
+            )
+
+
+def exibir_resumo(resultado: ResultadoJogo) -> None:
+    """Imprime um resumo final formatado da partida."""
+    print("\n" + "=" * 40)
+    print("RESULTADO FINAL")
+    print("=" * 40)
+    print(f"Numero da milhar sorteado : {resultado.numero_vencedor}")
+    print(f"Tentativas necessarias    : {resultado.total_tentativas}")
+    print("=" * 40)
+
+
+# ---------------------------------------------------------------------------
+# Ponto de entrada do programa
+# ---------------------------------------------------------------------------
+def main() -> None:
+    print("Iniciando o jogo A Milhar...\n")
+    resultado = jogar_partida(exibir_progresso=True)
+    exibir_resumo(resultado)
+
+
+if __name__ == "__main__":
+    main()
