@@ -6,15 +6,7 @@ Simulação de uma máquina de jogo do bicho (estilo "milhar"), desenvolvida em 
 
 O programa sorteia 4 números aleatórios entre 0 e 9 a cada tentativa. O jogador vence quando os 4 números sorteados são iguais entre si. O jogo repete as tentativas automaticamente até que a vitória aconteça, exibindo o número de cada tentativa (formatado como 001, 002, 003...) e o resultado sorteado.
 
-##  Como executar
 
-1. Certifique-se de ter o Python 3.10 ou superior instalado
-2. Clone este repositório ou baixe o arquivo `desafio14_a_milhar.py`
-3. No terminal, rode:
-
-```bash
-python desafio14_a_milhar.py
-```
 
 ##  Conceitos aplicados
 
